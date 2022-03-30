@@ -4,6 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ProgramData {
     public static ConcurrentHashMap<String, ManagerInfo> managers = new ConcurrentHashMap<String, ManagerInfo>();
+    public static ConcurrentHashMap<String, ManagerCoordinates> managerCoordinates = new ConcurrentHashMap<String, ManagerCoordinates>();
 
 
     public static Boolean returnIfFreezerExists(String key) {

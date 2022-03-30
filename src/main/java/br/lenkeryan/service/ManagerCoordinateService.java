@@ -15,23 +15,23 @@ import java.util.ArrayList;
 @Service
 public class ManagerCoordinateService {
 
-    private final KafkaStreams managerKafkaStreams;
+//    private final KafkaStreams managerKafkaStreams;
 
-    @Autowired
-    public ManagerCoordinateService(KafkaStreams managerKafkaStreams) {
-        this.managerKafkaStreams = managerKafkaStreams;
-    }
-
-    public ArrayList<ManagerCoordinates> getManagerCoordinates() {
-        ArrayList<ManagerCoordinates> managers = new ArrayList<>();
-        KeyValueIterator<String, ManagerCoordinates> iterator = getStore().all();
-        iterator.forEachRemaining(stringManagerCoordinatesKeyValue -> {
-             managers.add(stringManagerCoordinatesKeyValue.value);
-        });
-        return managers;
-    }
-
-    private ReadOnlyKeyValueStore<String, ManagerCoordinates> getStore() {
-        return managerKafkaStreams.store(StoreQueryParameters.fromNameAndType(ManagerCoordinateTopology.MANAGER_COORDINATES_STORE, QueryableStoreTypes.keyValueStore()));
-    }
+//    @Autowired
+//    public ManagerCoordinateService(KafkaStreams managerKafkaStreams) {
+//        this.managerKafkaStreams = managerKafkaStreams;
+//    }
+//
+//    public ArrayList<ManagerCoordinates> getManagerCoordinates() {
+//        ArrayList<ManagerCoordinates> managers = new ArrayList<>();
+//        KeyValueIterator<String, ManagerCoordinates> iterator = getStore().all();
+//        iterator.forEachRemaining(stringManagerCoordinatesKeyValue -> {
+//             managers.add(stringManagerCoordinatesKeyValue.value);
+//        });
+//        return managers;
+//    }
+//
+//    private ReadOnlyKeyValueStore<String, ManagerCoordinates> getStore() {
+//        return managerKafkaStreams.store(StoreQueryParameters.fromNameAndType(ManagerCoordinateTopology.MANAGER_COORDINATES_STORE, QueryableStoreTypes.keyValueStore()));
+//    }
 }
