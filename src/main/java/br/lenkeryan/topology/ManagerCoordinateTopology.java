@@ -21,13 +21,14 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class ManagerCoordinateTopology {
+    public static String MANAGER_COORDINATES_STORE = "manager-coordinates-store";
     static Logger logger = Logger.getLogger("VaccineLogger");
-    public static final String MANAGER_COORDINATES_STORE = "manager-coordinates-store";
+//    public static final String MANAGER_COORDINATES_STORE = "manager-coordinates-store";
 
     public static Properties getProps() {
         Properties prop = new Properties();
 
-        prop.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, Constants.MANAGERS_TOPIC);
+        prop.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, Constants.APPLICATION_ID);
         prop.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVER);
         prop.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         prop.setProperty(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.StringSerde.class.getName());
@@ -46,12 +47,6 @@ public class ManagerCoordinateTopology {
                     analyseManagerInfo(value);
                     return value;
                 }).peek((key, value) -> logger.info("Name: " + value.getManager().getName()));
-//                .groupByKey()
-//                .aggregate(ManagerCoordinates::new, (key, value, aggregate) -> aggregate,
-//                        Materialized.<String, ManagerCoordinates, KeyValueStore<Bytes, byte[]>>as(MANAGER_COORDINATES_STORE)
-//                                .withKeySerde(Serdes.String())
-//                                .withValueSerde(managerCoordinatesSerdes)
-//                );
 
         return streamsBuilder.build();
     }

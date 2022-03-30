@@ -2,6 +2,7 @@ package br.lenkeryan.utils;
 
 
 import br.lenkeryan.model.ManagerInfo;
+import br.lenkeryan.model.TemperatureProducerInfo;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
@@ -19,8 +20,18 @@ public class CustomJsonReader {
         try {
             File file = new File(filename);
             Gson gson = new Gson();
-            ManagerInfo managerInfo = gson.fromJson(new FileReader(file), ManagerInfo.class);
-            return managerInfo;
+            return gson.fromJson(new FileReader(file), ManagerInfo.class);
+        } catch ( Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public TemperatureProducerInfo readTemperatureProducerJsonInfo(String filename) {
+        try {
+            File file = new File(filename);
+            Gson gson = new Gson();
+            return gson.fromJson(new FileReader(file), TemperatureProducerInfo.class);
         } catch ( Exception e) {
             System.out.println(e.getMessage());
         }

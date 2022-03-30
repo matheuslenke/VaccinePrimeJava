@@ -11,6 +11,7 @@ import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 import java.util.Random;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ManagerProducer {
@@ -42,24 +43,21 @@ public class ManagerProducer {
             String data = json.toJson(info);
             ProducerRecord<String, String> record = new ProducerRecord<String, String>(Constants.MANAGERS_TOPIC, managerInfo.getId(), data);
             //enviar Localização serializada para Kafka
-            producer.send(record, new Callback() {
-                @Override
-                public void onCompletion(RecordMetadata metadata, Exception exception) {
-                    if (exception == null) {
-                        System.out.println("Manager: " + managerInfo.getName());
-                        logger.info("Metadados recebidos \n " +
-                                "Topic " + metadata.topic() + "\n " +
-                                "Partition: " + metadata.partition() + "\n" +
-                                "Offset: " + metadata.offset() + "\n" +
-                                "Timestamp: " + metadata.timestamp());
-                    } else {
-                        logger.info(exception.getLocalizedMessage());
-                    }
-                    try {
-                        Thread.sleep(sleepingTime * 1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+            producer.send(record, (metadata, exception) -> {
+                if (exception == null) {
+                    System.out.println("Manager: " + managerInfo.getName());
+                    logger.info("Metadados recebidos \n " +
+                            "Topic " + metadata.topic() + "\n " +
+                            "Partition: " + metadata.partition() + "\n" +
+                            "Offset: " + metadata.offset() + "\n" +
+                            "Timestamp: " + metadata.timestamp());
+                } else {
+                    logger.log(Level.WARNING, exception.getLocalizedMessage());
+                }
+                try {
+                    Thread.sleep(sleepingTime * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             });
 

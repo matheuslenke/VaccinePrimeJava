@@ -6,6 +6,7 @@ public class Constants {
 
     public static String MANAGERS_TOPIC = "managers-coordinates";
     public static String NOTIFICATIONS_TOPIC = "vaccine-notifications";
+    public static String APPLICATION_ID = "vaccinePrime";
 
     public static Integer MANAGERS_PARTITIONS = 3;
     public static Integer VACCINE_PARTITIONS = 3;

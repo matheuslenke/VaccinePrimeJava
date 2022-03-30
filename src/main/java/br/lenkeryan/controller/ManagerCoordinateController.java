@@ -17,13 +17,6 @@ import java.util.List;
 @RequestMapping("/manager-coordinates")
 public class ManagerCoordinateController {
 
-    private final ManagerCoordinateService service;
-
-    @Autowired
-    public ManagerCoordinateController(ManagerCoordinateService managerCoordinateService) {
-        this.service = managerCoordinateService;
-    }
-
     @GetMapping
     public ResponseEntity<List<ManagerInfo>> getManagersCoordinates() {
         return ResponseEntity.ok(ProgramData.managers.values().stream().toList());

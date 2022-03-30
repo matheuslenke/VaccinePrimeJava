@@ -13,4 +13,8 @@ public class KafkaTopicConfig {
     public NewTopic managersTopic() {
         return TopicBuilder.name(Constants.MANAGERS_TOPIC).build();
     }
+
+    public static NewTopic CreateNewTopic(String topicName) {
+        return TopicBuilder.name(topicName).build();
+    }
 }
