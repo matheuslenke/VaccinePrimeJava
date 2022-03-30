@@ -12,7 +12,8 @@ public class ProgramData {
     }
 
     public static Boolean returnIfManagerExists(String key) {
-        if (managers.get(key) != null) {
+        var item = managers.get(key);
+        if (managers.get(key) == null) {
             return false;
         };
         return true;

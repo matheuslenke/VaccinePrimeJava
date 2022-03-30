@@ -22,8 +22,8 @@ public class ManagerProducer {
     static Integer sleepingTime = 10;
 
     public static void main(String[] args) {
-
-        managerInfo = jsonReader.readManagerJsonInfo("managerProducer/manager1.json");
+        String filename = args[0];
+        managerInfo = jsonReader.readManagerJsonInfo(filename);
         run();
     }
 

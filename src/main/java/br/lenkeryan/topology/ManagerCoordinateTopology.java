@@ -36,8 +36,6 @@ public class ManagerCoordinateTopology {
     }
 
     public static Topology buildTopology() {
-
-        Properties prop = getProps();
         Serde<ManagerCoordinates> managerCoordinatesSerdes = new JsonSerde<>(ManagerCoordinates.class);
         StreamsBuilder streamsBuilder = new StreamsBuilder();
 
@@ -47,45 +45,27 @@ public class ManagerCoordinateTopology {
                 .mapValues(value -> {
                     analyseManagerInfo(value);
                     return value;
-                }).peek((key, value) -> logger.info("Name: " + value.getManager().getName()))
-                .groupByKey()
-                .aggregate(ManagerCoordinates::new, (key, value, aggregate) -> aggregate,
-                        Materialized.<String, ManagerCoordinates, KeyValueStore<Bytes, byte[]>>as(MANAGER_COORDINATES_STORE)
-                                .withKeySerde(Serdes.String())
-                                .withValueSerde(managerCoordinatesSerdes)
-                );
+                }).peek((key, value) -> logger.info("Name: " + value.getManager().getName()));
+//                .groupByKey()
+//                .aggregate(ManagerCoordinates::new, (key, value, aggregate) -> aggregate,
+//                        Materialized.<String, ManagerCoordinates, KeyValueStore<Bytes, byte[]>>as(MANAGER_COORDINATES_STORE)
+//                                .withKeySerde(Serdes.String())
+//                                .withValueSerde(managerCoordinatesSerdes)
+//                );
 
         return streamsBuilder.build();
     }
 
     private static void analyseManagerInfo(ManagerCoordinates managerCoordinate) {
-        Boolean managerExists = ProgramData.returnIfManagerExists(managerCoordinate.getManager().getId().toString());
+        Boolean managerExists = ProgramData.returnIfManagerExists(managerCoordinate.getManager().getId());
         if(!managerExists) {
             logger.info("[ManagerConsumer] Novo manager com nome ${info.manager.name} registrado no consumidor.");
-            ProgramData.managers.put(managerCoordinate.getId().toString(), managerCoordinate.getManager());
+            ProgramData.managers.put(managerCoordinate.getManager().getId().toString(), managerCoordinate.getManager());
         } else {
-            ManagerInfo actualManager = ProgramData.managers.get(managerCoordinate.getManager().getId().toString());
+            ManagerInfo actualManager = ProgramData.managers.get(managerCoordinate.getManager().getId());
             if (actualManager != null) {
                 actualManager.setInitialCoordinate(managerCoordinate.getCoordinate());
             }
         }
     }
 }
-
-
-//    KStream<Long, BankBalance> bankBalancesStream = streamsBuilder.stream(BANK_TRANSACTIONS,
-//                    Consumed.with(Serdes.Long(), bankTransactionSerdes))
-//            .groupByKey()
-//            .aggregate(BankBalance::new,
-//                    (key, value, aggregate) -> aggregate.process(value),
-//                    Materialized.with(Serdes.Long(), bankBalanceSerde))
-//            .toStream();
-//        bankBalancesStream
-//                .to(BANK_BALANCES, Produced.with(Serdes.Long(), bankBalanceSerde));
-//
-//                bankBalancesStream
-//                .mapValues((readOnlyKey, value) -> value.getLatestTransaction())
-//                .filter((key, value) -> value.state == BankTransaction.BankTransactionState.REJECTED)
-//                .to(REJECTED_TRANSACTIONS, Produced.with(Serdes.Long(), bankTransactionSerdes));
-//
-//                return streamsBuilder.build();
