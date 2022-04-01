@@ -73,7 +73,7 @@ public class VaccineProducer {
         prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVER);
         prop.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-
+        prop.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, String.valueOf(16384));
         String topicName = producerInfo.getHospital();
         KafkaTopicConfig.CreateNewTopic(topicName);
         return new KafkaProducer<>(prop);

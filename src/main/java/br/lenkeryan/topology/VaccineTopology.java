@@ -44,6 +44,7 @@ public class VaccineTopology {
                 .peek((key, value) -> {
                     logger.info("Temperatura recebida: " + value.getValue() + "Para o hospital " + value.getProducerInfo().getHospital());
                     ProgramData.temperatureReads.add(value);
+                    addFreezersToHashMap(value);
                 })
                 .filter((key, value) -> value.getProducerInfo() != null && value.getProducerInfo().getVaccines() != null)
                 // Filtrando para pegar temperaturas que estão fora dos limites
@@ -71,6 +72,13 @@ public class VaccineTopology {
         return streamsBuilder.build();
     }
 
+    private static void addFreezersToHashMap(TemperatureInfo tempInfo) {
+        var knowFreezers = ProgramData.knowFreezers;
+        var contains = ProgramData.returnIfFreezerExists(tempInfo.getProducerInfo().getId());
+        if(!contains) {
+            knowFreezers.put(tempInfo.getProducerInfo().getId(), tempInfo.getProducerInfo());
+        }
+    }
 
     private static Notification analyseNotificationToSend(TemperatureInfo tempInfo) {
         var knowFreezers = ProgramData.knowFreezers;
