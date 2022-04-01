@@ -21,4 +21,5 @@ public class ManagerCoordinateController {
     public ResponseEntity<List<ManagerInfo>> getManagersCoordinates() {
         return ResponseEntity.ok(ProgramData.managers.values().stream().toList());
     }
+
 }

@@ -43,6 +43,7 @@ public class VaccineTopology {
         vaccineTemperatures
                 .peek((key, value) -> {
                     logger.info("Temperatura recebida: " + value.getValue() + "Para o hospital " + value.getProducerInfo().getHospital());
+                    ProgramData.temperatureReads.add(value);
                 })
                 .filter((key, value) -> value.getProducerInfo() != null && value.getProducerInfo().getVaccines() != null)
                 // Filtrando para pegar temperaturas que estão fora dos limites

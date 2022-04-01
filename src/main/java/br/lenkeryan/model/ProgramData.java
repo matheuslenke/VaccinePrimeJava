@@ -12,6 +12,7 @@ public class ProgramData {
     public static ConcurrentHashMap<String, ManagerInfo> managers = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String, TemperatureProducerInfo> knowFreezers = new ConcurrentHashMap<>();
     public static ConcurrentLinkedQueue<Notification> notifications = new ConcurrentLinkedQueue<>();
+    public static ConcurrentLinkedQueue<TemperatureInfo> temperatureReads = new ConcurrentLinkedQueue<>();
 
     public static Boolean returnIfFreezerExists(String key) {
         if (knowFreezers.get(key) == null) {
@@ -47,7 +48,6 @@ public class ProgramData {
 
         return nearestManager[0];
     }
-
 
     private static Double calculateDistance(Coordinate coordinate1, Coordinate coordinate2) {
         var earthRadius = 6371e3; //raio da terra em metros
