@@ -13,7 +13,7 @@ public class Notification {
     NotificationType notificationType;
     String message;
     Boolean willNotificateAllManagers = false;
-    ArrayList<ManagerInfo> managersToNotificate;
+    ArrayList<ManagerInfo> managersToNotificate = new ArrayList<>();
 
     public Notification(NotificationType type, String message, ManagerInfo nearestManager) {
         this.notificationType = type;

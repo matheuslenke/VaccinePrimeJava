@@ -25,7 +25,7 @@ public class VaccineTopology {
     public static Properties getProps() {
         Properties prop = new Properties();
 
-        prop.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, Constants.APPLICATION_ID);
+        prop.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "vaccine-prime-vaccine");
         prop.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVER);
         prop.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         prop.setProperty(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.StringSerde.class.getName());
@@ -126,7 +126,7 @@ public class VaccineTopology {
             } else {
                 logger.info("[VaccineConsumer] Criando notificação do tipo CAUTION de temperatura fora dos limites");
             }
-            notification = null;
+            return notification;
         }
         return null;
     }
@@ -138,7 +138,7 @@ public class VaccineTopology {
         } else {
             return new Notification(
                     NotificationType.WARN,
-                    "Atenção ${nearestManager.name}! A câmara de vacina de id ${freezer.id} do hospital ${freezer.hospital} está com temperaturas fora do limite, por favor verifique",
+                    "Atenção " + nearestManager.getName() +  " A câmara de vacina de id " + freezer.getId() +"  do hospital " + freezer.getHospital() + " está com temperaturas fora do limite, por favor verifique",
                     nearestManager);
         }
         return null;

@@ -28,7 +28,7 @@ public class ManagerCoordinateTopology {
     public static Properties getProps() {
         Properties prop = new Properties();
 
-        prop.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, Constants.APPLICATION_ID);
+        prop.setProperty(StreamsConfig.APPLICATION_ID_CONFIG, "vaccine-prime-managers");
         prop.setProperty(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, Constants.BOOTSTRAP_SERVER);
         prop.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         prop.setProperty(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.StringSerde.class.getName());
@@ -43,9 +43,8 @@ public class ManagerCoordinateTopology {
         KTable<String, ManagerCoordinates> managerLocations = streamsBuilder.table(Constants.MANAGERS_TOPIC, Consumed.with(Serdes.String(), managerCoordinatesSerdes));
 
         managerLocations.toStream()
-                .mapValues(value -> {
+                .peek((key, value) -> {
                     analyseManagerInfo(value);
-                    return value;
                 }).peek((key, value) -> logger.info("Name: " + value.getManager().getName()));
 
         return streamsBuilder.build();
@@ -54,7 +53,7 @@ public class ManagerCoordinateTopology {
     private static void analyseManagerInfo(ManagerCoordinates managerCoordinate) {
         Boolean managerExists = ProgramData.returnIfManagerExists(managerCoordinate.getManager().getId());
         if(!managerExists) {
-            logger.info("[ManagerConsumer] Novo manager com nome ${info.manager.name} registrado no consumidor.");
+            logger.info("[ManagerConsumer] Novo manager com nome " + managerCoordinate.getManager().getName() + " registrado no consumidor.");
             ProgramData.managers.put(managerCoordinate.getManager().getId().toString(), managerCoordinate.getManager());
         } else {
             ManagerInfo actualManager = ProgramData.managers.get(managerCoordinate.getManager().getId());

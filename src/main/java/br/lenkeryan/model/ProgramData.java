@@ -3,6 +3,7 @@ package br.lenkeryan.model;
 import org.apache.catalina.Manager;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static java.lang.Math.atan2;
 import static java.lang.Math.sqrt;
@@ -10,7 +11,7 @@ import static java.lang.Math.sqrt;
 public class ProgramData {
     public static ConcurrentHashMap<String, ManagerInfo> managers = new ConcurrentHashMap<>();
     public static ConcurrentHashMap<String, TemperatureProducerInfo> knowFreezers = new ConcurrentHashMap<>();
-
+    public static ConcurrentLinkedQueue<Notification> notifications = new ConcurrentLinkedQueue<>();
 
     public static Boolean returnIfFreezerExists(String key) {
         if (knowFreezers.get(key) == null) {

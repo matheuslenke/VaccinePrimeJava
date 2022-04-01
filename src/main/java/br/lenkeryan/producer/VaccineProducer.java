@@ -22,7 +22,7 @@ public class VaccineProducer {
     static CustomJsonReader jsonReader = new CustomJsonReader();
     static Logger logger = Logger.getLogger("VaccineLogger");
     static Boolean temperatureOutOfBounds = true;
-    static Double sleepingTime = 5.0;
+    static Double sleepingTime = 10.0;
     static Gson json = new Gson();
 
     public static void main(String[] args) {
@@ -92,7 +92,7 @@ public class VaccineProducer {
                     temp = random.nextDouble(vaccine.getMaxTemperature(), vaccine.getMaxTemperature() + 10);
         } else {
             Vaccine vaccine = producerInfo.getVaccines().get(0);
-                    temp = random.nextDouble(vaccine.getMinTemperature() , vaccine.getMinTemperature());
+                    temp = random.nextDouble(vaccine.getMinTemperature() , vaccine.getMaxTemperature());
         }
         return new TemperatureInfo(temp, producerInfo, coord);
     }
